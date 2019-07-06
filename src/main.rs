@@ -44,7 +44,11 @@ fn scene_intersect(orig: &VecF, dir: &VecF, sphere_list: &Vec<Sphere>)
     let mut dist = f32::MAX;
     let mut hit = VecF::new(3);
     let mut n = VecF::new(3);
-    let mut material = Material::new(0.0, VecF::new(4), VecF::new(3), 0.0);
+    let mut material = Material::new(
+        1.0,
+        VecF::from_slice(&[1.0, 0.0, 0.0, 0.0]),
+        VecF::new(3),
+        0.0);
 
     for sphere in sphere_list {
         let (intersect, dist_i) = sphere.ray_intersect(orig, dir);
@@ -62,16 +66,16 @@ fn scene_intersect(orig: &VecF, dir: &VecF, sphere_list: &Vec<Sphere>)
         let d = -(orig[1] + 4.0) / dir[1];
         let pt = orig + &(dir * d);
         if d > 0.0 && pt[0].abs() < 10.0 && pt[2] < -10.0 && pt[2] > -30.0 && d < dist {
-            let diffuse_flag = ((hit[0] * 0.5 + 1000.0) as i32 + (hit[2] * 0.5) as i32) & 1;
+            let diffuse_flag = ((pt[0] * 0.5 + 1000.0) as i32 + (pt[2] * 0.5) as i32) & 1;
 
             checkerboard_dist = d;
             hit = pt;
             n = VecF::from_slice(&[0.0, 1.0, 0.0]);
             material.diffuse = if diffuse_flag == 0 {
-                VecF::from_slice(&[3.0, 2.1, 0.9])
+                &VecF::from_slice(&[1.0, 0.7, 0.3]) * 0.3
             }
             else {
-                VecF::from_slice(&[3.0, 3.0, 3.0])
+                &VecF::from_slice(&[1.0, 1.0, 1.0]) * 0.3
             };
         }
     }
