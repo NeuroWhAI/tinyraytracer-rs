@@ -1,0 +1,6 @@
+/target
+**/*.rs.bk
+/Cargo.lock
+/.idea
+/tinyraytracer.iml
+/out.ppm
